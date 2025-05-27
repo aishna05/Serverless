@@ -1,0 +1,30 @@
+service: email-api
+frameworkVersion: '3'
+
+useDotenv: true   
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  environment:
+    GMAIL_USER: ${env:GMAIL_USER}
+    GMAIL_PASS: ${env:GMAIL_PASS}
+
+functions:
+  sendEmail:
+    handler: handler.sendEmail
+    timeout: 30
+    events:
+      - http:
+          path: send-email
+          method: post
+          cors: true
+      - http:
+          path: send-email
+          method: get
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin

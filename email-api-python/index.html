@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Send Email</title>
+</head>
+<body>
+  <h2>Send an Email</h2>
+  <form id="emailForm">
+    <input type="email" id="receiver_email" placeholder="Receiver Email" required /><br /><br />
+    <input type="text" id="subject" placeholder="Subject" required /><br /><br />
+    <textarea id="body_text" placeholder="Email body" required></textarea><br /><br />
+    <button type="submit">Send Email</button>
+  </form>
+
+  <p id="responseMessage" style="color: green;"></p>
+
+  <script>
+    document.getElementById('emailForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const receiver_email = document.getElementById('receiver_email').value;
+      const subject = document.getElementById('subject').value;
+      const body_text = document.getElementById('body_text').value;
+
+      fetch('http://localhost:3000/dev/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiver_email, subject, body_text }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log('Success:', data);
+          document.getElementById('responseMessage').textContent = data.message;
+        })
+        .catch((err) => {
+          console.error('Error:', err);
+          document.getElementById('responseMessage').textContent = 'Failed to send email';
+        });
+    });
+  </script>
+</body>
+</html>
