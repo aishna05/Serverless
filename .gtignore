@@ -3,3 +3,4 @@ email-api-python\.env
 email-api-python\node_modules
 .env
 C:\Work\Projects\Serverless\email-api-python\node_modules
+email-api-python\__pycache__
