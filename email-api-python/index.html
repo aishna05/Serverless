@@ -29,14 +29,21 @@
         },
         body: JSON.stringify({ receiver_email, subject, body_text }),
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('Success:', data);
-          document.getElementById('responseMessage').textContent = data.message;
+        .then(async (res) => {
+          const data = await res.json();
+          const status = res.status;
+
+          // Set response text with message and status
+          document.getElementById('responseMessage').textContent =
+            `Status Code: ${status} - ${data.message || 'No message returned'}`;
+
+          // Optionally change color based on success or failure
+          document.getElementById('responseMessage').style.color = status === 200 ? 'green' : 'red';
         })
         .catch((err) => {
           console.error('Error:', err);
-          document.getElementById('responseMessage').textContent = 'Failed to send email';
+          document.getElementById('responseMessage').textContent = 'Error occurred while sending request.';
+          document.getElementById('responseMessage').style.color = 'red';
         });
     });
   </script>

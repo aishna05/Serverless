@@ -5,7 +5,10 @@ module.exports.sendEmail = async (event) => {
     if (!event.body) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: 'Missing request body' }),
+        body: JSON.stringify({
+          message: 'Missing request body',
+          statusCode: 400,
+        }),
       };
     }
 
@@ -15,11 +18,13 @@ module.exports.sendEmail = async (event) => {
     if (!receiver_email || !subject || !body_text) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: 'Missing required fields' }),
+        body: JSON.stringify({
+          message: 'Missing required fields: receiver_email, subject, body_text',
+          statusCode: 400,
+        }),
       };
     }
 
-    // Configure Nodemailer with Gmail SMTP
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -42,6 +47,7 @@ module.exports.sendEmail = async (event) => {
       body: JSON.stringify({
         message: 'Email sent successfully',
         info: info.response,
+        statusCode: 200,
       }),
     };
   } catch (error) {
@@ -51,6 +57,7 @@ module.exports.sendEmail = async (event) => {
       body: JSON.stringify({
         message: 'Failed to send email',
         error: error.message,
+        statusCode: 500,
       }),
     };
   }
